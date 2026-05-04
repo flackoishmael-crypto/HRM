@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How Was Your Day?</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #6d28d9, #8b5cf6, #c084fc);
+      color: #2b2b2b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    main {
+      width: min(100%, 520px);
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      border-radius: 8px;
+      box-shadow: 0 20px 50px rgba(57, 34, 90, 0.28);
+      padding: 32px;
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 2rem;
+      color: #3d3d3d;
+    }
+
+    p {
+      margin: 0 0 22px;
+      line-height: 1.6;
+      color: #555;
+    }
+
+    .mood-buttons {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 8px;
+      background: #5b21b6;
+      color: white;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 12px 10px;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    button:hover {
+      background: #3b0764;
+      transform: translateY(-2px);
+    }
+
+    input {
+      width: 100%;
+      border: 1px solid #d8d8d8;
+      border-radius: 8px;
+      font-size: 1rem;
+      margin-bottom: 12px;
+      padding: 13px 14px;
+    }
+
+    input:focus {
+      border-color: #7c3aed;
+      outline: 3px solid rgba(124, 58, 237, 0.16);
+    }
+
+    .message {
+      min-height: 84px;
+      margin-top: 22px;
+      border-radius: 8px;
+      background: #f5f0ff;
+      border: 1px solid #d8b4fe;
+      color: #3b0764;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      font-size: 1.08rem;
+      line-height: 1.6;
+    }
+
+    .small-note {
+      margin-top: 18px;
+      margin-bottom: 0;
+      font-size: 0.9rem;
+      color: #777;
+    }
+
+    .credit {
+      margin-top: 18px;
+      margin-bottom: 0;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #5b21b6;
+    }
+
+    @media (max-width: 520px) {
+      main {
+        padding: 24px;
+      }
+
+      .mood-buttons {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>How was your day?</h1>
+    <p>Choose a feeling or write a tiny note, and this page will send a little kindness back.</p>
+
+    <div class="mood-buttons" aria-label="Choose how your day felt">
+      <button type="button" data-mood="good">Good</button>
+      <button type="button" data-mood="okay">Okay</button>
+      <button type="button" data-mood="hard">Hard</button>
+    </div>
+
+    <input id="dayInput" type="text" placeholder="Or type how your day was..." aria-label="Describe your day">
+    <button type="button" id="sendButton">Send me a sweet message</button>
+
+    <div class="message" id="messageBox" aria-live="polite">
+      I am here when you are ready.
+    </div>
+
+    <p class="small-note">A small reminder: you made it through today, and that matters.</p>
+    <p class="credit">Made by yours lovingly Addmore ❤️</p>
+  </main>
+
+  <script>
+    const messageBox = document.getElementById("messageBox");
+    const dayInput = document.getElementById("dayInput");
+    const sendButton = document.getElementById("sendButton");
+    const moodButtons = document.querySelectorAll("[data-mood]");
+
+    const messages = {
+      good: "Flacko is happy that you are having a good day. Keep the warm parts of today close, and let them remind you that good moments can find you again.",
+      okay: "Addmore wishes you a better day. An okay day still counts, and you deserve a soft landing now.",
+      hard: "Addmore wishes you a better day. Please be gentle with yourself tonight. You do not have to solve everything before you rest."
+    };
+
+    function showMessage(text) {
+      messageBox.textContent = text;
+    }
+
+    moodButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const mood = button.dataset.mood;
+        showMessage(messages[mood]);
+      });
+    });
+
+    sendButton.addEventListener("click", () => {
+      const day = dayInput.value.trim();
+
+      if (!day) {
+        showMessage("Whatever kind of day it was, I hope the next few minutes feel calm and kind to you.");
+        return;
+      }
+
+      showMessage(`Thank you for sharing that your day was "${day}". You deserve patience, comfort, and one lovely little thing before the day ends.`);
+      dayInput.value = "";
+    });
+
+    dayInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        sendButton.click();
+      }
+    });
+  </script>
+</body>
+</html>
